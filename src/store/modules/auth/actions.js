@@ -9,6 +9,7 @@ export async function login({state, commit}, params) {
             lastName: 'Admin',
             imageUrl: '/assets/avatar.svg'
         }
+        authService.setUser(user)
         commit(SET_CURRENT_USER, user)
         return {
             success: true,
@@ -26,4 +27,9 @@ export async function login({state, commit}, params) {
 export async function logout({commit}) {
     authService.logout()
     commit(REMOVE_CURRENT_USER)
+}
+
+export async function getAuthUser({commit}) {
+    const data = authService.getUser()
+    commit(SET_CURRENT_USER, JSON.parse(data))
 }
