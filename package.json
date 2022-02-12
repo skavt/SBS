@@ -16,7 +16,6 @@
     "lodash": "^4.17.21",
     "moment": "2.24.0",
     "vee-validate": "^3.4.5",
-    "vfa-picker": "^5.9.1",
     "vue": "^2.6.12",
     "vue-avatar-cropper": "^1.0.9",
     "vue-router": "^3.5.1",

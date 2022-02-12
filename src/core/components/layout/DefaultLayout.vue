@@ -9,10 +9,6 @@
 
 <script>
 import Navbar from "../navbar/Navbar";
-import Sidebar from "../sidebar/Sidebar";
-import MenuService from "../sidebar/MenuService";
-import MenuItem from "../sidebar/MenuItem";
-import {createNamespacedHelpers} from "vuex";
 
 export default {
   name: "DefaultLayout",

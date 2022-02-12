@@ -6,8 +6,6 @@ import './index.scss';
 
 import './core/index';
 
-import './permission/index';
-
 import router from "./router/router";
 import store from './store';
 
