@@ -36,7 +36,6 @@ export default {
       this.loading = true
       this.model.resetErrors()
       const {success, body} = await this.login({...this.model.toJSON()})
-      console.log(body)
       this.loading = false
       if (success) {
         this.$router.push({name: 'dashboard'});
