@@ -14,8 +14,9 @@
       <div v-if="!loading && blogs.length" class="page-content">
         <b-card class="mt-3" no-body v-for="data in blogs" :key="`blog-${data.uuid}`">
           <b-card-body>
-            <div class="d-flex justify-content-between align-items-center">
-              <router-link class="blog-linked-text" to="#" :style="smallScreenStyles">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <router-link class="blog-linked-text" :to="{name: 'blog', params: {blogUuid: data.uuid}}"
+                           :style="smallScreenStyles">
                 {{ data.title }}
               </router-link>
               <div>
@@ -23,7 +24,6 @@
                 <i class="fas fa-pencil-alt text-info blog-actions mr-2" @click="onUpdateBlogClick(data)"/>
               </div>
             </div>
-            <hr/>
             <div class="d-flex align-items-end blog-body" @click="onBodyClick(data)">
               {{ truncateText(data.body) }}
             </div>
@@ -62,7 +62,7 @@ export default {
   computed: {
     ...mapState(['blogs', 'loading']),
     isSmallScreen() {
-      return this.windowWidth <= 430
+      return this.windowWidth <= 480
     },
     smallScreenStyles() {
       return this.isSmallScreen ? {fontSize: '12px'} : {}
@@ -89,7 +89,7 @@ export default {
       return content.length > this.textMaxLength ? content.slice(0, this.textMaxLength) + '...' : content;
     },
     onBodyClick(params) {
-      console.log(params.uuid)
+      this.$router.push({name: 'blog', params: {blogUuid: params.uuid}})
     },
   },
   mounted() {

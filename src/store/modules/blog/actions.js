@@ -2,8 +2,11 @@ import {
     ADD_NEW_BLOG,
     DELETE_BLOG,
     HIDE_BLOG_MODAL,
+    REMOVE_CURRENT_BLOG,
     SET_BLOGS_DATA,
+    SET_CURRENT_BLOG,
     SHOW_BLOG_MODAL,
+    TOGGLE_BLOG_VIEW_LOADING,
     TOGGLE_LOADING,
     TOGGLE_MODAL_LOADING,
     UPDATE_BLOG
@@ -14,6 +17,13 @@ export async function getAllBlog({commit}) {
     const data = localStorage.getItem('BLOG_DATA') || '[]'
     commit(SET_BLOGS_DATA, JSON.parse(data))
     commit(TOGGLE_LOADING, false)
+}
+
+export async function getBlogByUuid({commit, dispatch}, blogUuid) {
+    commit(TOGGLE_BLOG_VIEW_LOADING, true)
+    dispatch('getAllBlog')
+    commit(SET_CURRENT_BLOG, blogUuid)
+    commit(TOGGLE_BLOG_VIEW_LOADING, false)
 }
 
 export async function showBlogModal({commit}, params = {}) {
@@ -44,6 +54,10 @@ export async function deleteBlog({state, commit}, blogUuid) {
     commit(DELETE_BLOG, blogUuid)
     saveBlogData(state.blogs)
     return {success: true}
+}
+
+export async function removeCurrentBlog({commit}) {
+    commit(REMOVE_CURRENT_BLOG)
 }
 
 function saveBlogData(data = []) {

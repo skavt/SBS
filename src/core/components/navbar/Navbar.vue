@@ -55,7 +55,7 @@ export default {
   computed: {
     ...mapState(['currentUser']),
     isSmallScreen() {
-      return this.windowWidth <= 430
+      return this.windowWidth <= 480
     },
   },
   methods: {

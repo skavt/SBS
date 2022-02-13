@@ -5,6 +5,7 @@ import Login from "../modules/Auth/Login";
 import authService from "../core/services/authService";
 import DefaultLayout from "../core/components/layout/DefaultLayout";
 import Home from "../modules/Home/Home";
+import Blog from "../modules/Blog/Blog";
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,11 @@ const router = new VueRouter({
           path: 'home',
           name: 'home',
           component: Home,
+        },
+        {
+          path: 'blog/:blogUuid',
+          name: 'blog',
+          component: Blog,
         },
       ]
     }

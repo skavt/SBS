@@ -1,8 +1,12 @@
 import {
-    ADD_NEW_BLOG, DELETE_BLOG,
+    ADD_NEW_BLOG,
+    DELETE_BLOG,
     HIDE_BLOG_MODAL,
+    REMOVE_CURRENT_BLOG,
     SET_BLOGS_DATA,
+    SET_CURRENT_BLOG,
     SHOW_BLOG_MODAL,
+    TOGGLE_BLOG_VIEW_LOADING,
     TOGGLE_LOADING,
     TOGGLE_MODAL_LOADING,
     UPDATE_BLOG
@@ -46,9 +50,24 @@ export default {
         const index = state.blogs.findIndex(b => b.uuid === payload.uuid)
         state.blogs[index] = {...payload}
         state.blogs = [...state.blogs]
+
+        const blog = state.blogView.currentBlog
+        if (Object.keys(blog).length && blog.uuid === payload.uuid) {
+            state.blogView.currentBlog = {...payload}
+        }
     },
     [DELETE_BLOG](state, blogUuid) {
         state.blogs = state.blogs.filter(b => b.uuid !== blogUuid)
         state.blogs = [...state.blogs]
+    },
+    [TOGGLE_BLOG_VIEW_LOADING](state, payload) {
+        state.blogView.loading = payload
+    },
+    [SET_CURRENT_BLOG](state, blogUuid) {
+        const blog = state.blogs.find(b => b.uuid === blogUuid)
+        state.blogView.currentBlog = {...blog}
+    },
+    [REMOVE_CURRENT_BLOG](state) {
+        state.blogView.currentBlog = {}
     },
 }
