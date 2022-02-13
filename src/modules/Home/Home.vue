@@ -14,13 +14,18 @@
       <div v-if="!loading && blogs.length" class="page-content">
         <b-card class="mt-3" no-body v-for="data in blogs" :key="`blog-${data.uuid}`">
           <b-card-body>
-            <router-link class="blog-linked-text" to="#" :style="smallScreenStyles">
-              {{ data.title }}
-            </router-link>
+            <div class="d-flex justify-content-between align-items-center">
+              <router-link class="blog-linked-text" to="#" :style="smallScreenStyles">
+                {{ data.title }}
+              </router-link>
+              <div>
+                <i class="fas fa-trash-alt text-danger blog-actions" @click="onDeleteBlogClick(data)"/>
+                <i class="fas fa-pencil-alt text-info blog-actions mr-2" @click="onUpdateBlogClick(data)"/>
+              </div>
+            </div>
             <hr/>
-            <div class="d-flex align-items-end">
+            <div class="d-flex align-items-end blog-body" @click="onBodyClick(data)">
               {{ truncateText(data.body) }}
-              <router-link v-if="needTruncate(data.body)" class="blog-linked-text" to="#">more</router-link>
             </div>
           </b-card-body>
           <b-card-footer>
@@ -34,6 +39,7 @@
         </b-card>
       </div>
     </b-card-body>
+    <blog-modal/>
   </b-card>
 </template>
 
@@ -41,11 +47,13 @@
 import {createNamespacedHelpers} from 'vuex'
 import ViewSpinner from "../../core/components/view-spinner/view-spinner";
 import NoContent from "../../core/components/no-content/NoContent";
+import BlogModal from "../Blog/modals/BlogModal";
+import {deleteBlog} from "../../store/modules/blog/actions";
 
 const {mapState, mapActions} = createNamespacedHelpers('blog')
 export default {
   name: "Home",
-  components: {NoContent, ViewSpinner},
+  components: {BlogModal, NoContent, ViewSpinner},
   data() {
     return {
       windowWidth: window.innerWidth,
@@ -64,16 +72,25 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getAllBlog']),
+    ...mapActions(['getAllBlog', 'showBlogModal', 'deleteBlog']),
     onCreateBlogClick() {
-
+      this.showBlogModal()
+    },
+    onUpdateBlogClick(params) {
+      this.showBlogModal(params)
+    },
+    async onDeleteBlogClick(params) {
+      const confirm = await this.$confirm('Are you sure you want to delete following blog?', 'Deleting Blog')
+      if (confirm) {
+        await this.deleteBlog(params.uuid);
+      }
     },
     truncateText(content) {
-      return this.needTruncate(content) ? content.slice(0, this.textMaxLength) + '...' : content;
+      return content.length > this.textMaxLength ? content.slice(0, this.textMaxLength) + '...' : content;
     },
-    needTruncate(content) {
-      return content.length > this.textMaxLength;
-    }
+    onBodyClick(params) {
+      console.log(params.uuid)
+    },
   },
   mounted() {
     window.addEventListener('resize', () => {
@@ -118,5 +135,14 @@ export default {
 
 .user-name {
   color: #008BCA;
+}
+
+.blog-actions {
+  cursor: pointer;
+  float: right;
+}
+
+.blog-body {
+  cursor: pointer;
 }
 </style>
