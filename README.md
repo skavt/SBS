@@ -1,4 +1,10 @@
-# vuejs
+# SPS
+
+## Test user credentials
+```
+username: admin@example.com
+password: admin123
+```
 
 ## Project setup
 ```
