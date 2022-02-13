@@ -1,9 +1,18 @@
 <template>
   <b-media class="py-2">
     <template v-slot:aside>
-      <b-img rounded="circle" :src="comment.createdBy.imageUrl  || '/assets/avatar.svg'" width="32" height="32"/>
+      <b-img v-if="isSmallScreen" rounded="circle" :src="comment.createdBy.imageUrl  || '/assets/avatar.svg'" width="20"
+             height="20"/>
+      <b-img v-else rounded="circle" :src="comment.createdBy.imageUrl  || '/assets/avatar.svg'" width="32" height="32"/>
     </template>
-    <h6 class="mt-0 mb-0">
+    <h6 v-if="isSmallScreen" class="mt-0 mb-0" :style="smallScreenStyles">
+      <span class="user-name">
+        {{ comment.createdBy.lastName }}, {{ comment.createdBy.firstName }}
+      </span>
+      <br/>
+      {{ comment.updatedAt | relativeDate }}
+    </h6>
+    <h6 v-else class="mt-0 mb-0">
       <span class="user-name">
         Test
         {{ comment.createdBy.lastName }}, {{ comment.createdBy.firstName }}
@@ -39,6 +48,19 @@ export default {
       type: Object,
     },
   },
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+    }
+  },
+  computed: {
+    isSmallScreen() {
+      return this.windowWidth <= 480
+    },
+    smallScreenStyles() {
+      return this.isSmallScreen ? {fontSize: '10px'} : {}
+    },
+  },
   methods: {
     ...mapActions(['deleteComment']),
     async onDelete() {
@@ -48,6 +70,11 @@ export default {
       }
     },
   },
+  mounted() {
+    window.addEventListener('resize', () => {
+      this.windowWidth = window.innerWidth
+    })
+  }
 }
 </script>
 

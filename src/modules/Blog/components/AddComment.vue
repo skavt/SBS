@@ -7,7 +7,7 @@
         </template>
         <b-form @submit.prevent="handleSubmit(onAddCommentClick)" @keydown="onKeydown">
           <div class="grow-wrap">
-            <b-form-textarea v-model="comment" placeholder="Leave Comment" name="text" id="text"
+            <b-form-textarea v-model="comment" placeholder="Comment" name="text" id="text"
                              onInput="this.parentNode.dataset.replicatedValue = this.value">
             </b-form-textarea>
             <b-button @click="onAddCommentClick" class="add-comment" variant="link" size="lg">
