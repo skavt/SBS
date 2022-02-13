@@ -66,20 +66,20 @@
             <b-img v-if="currentBlog.imageUrl" class="mb-3" :src="currentBlog.imageUrl" width="100%" height="100%"/>
             <h6>{{ currentBlog.body }}</h6>
           </b-card-body>
-          <!--          <b-card-footer>-->
-          <!--            <b-button size="sm" pill variant="light" :pressed.sync="showComments">-->
-          <!--              <i class="far fa-comments fa-lg"/>-->
-          <!--              <b-badge v-if="data.blogComments" class="ml-2" pill variant="secondary">-->
-          <!--                {{ data.blogComments.length }}-->
-          <!--              </b-badge>-->
-          <!--            </b-button>-->
-          <!--          </b-card-footer>-->
-          <!--          <add-comment v-if="showComments" :blog_id="data.id" :current-user="currentUser" :channel-id="channelData.id"/>-->
-          <!--          <b-card-body v-if="showComments && data.blogComments && data.blogComments.length" class="pt-1 pb-1">-->
-          <!--            <comment-item v-for="(comment, index) in data.blogComments" :comment="comment" :index="index" :blog="data"-->
-          <!--                          :key="`blog-comment-${index}`" :current-user="currentUser" :channel-id="channelData.id">-->
-          <!--            </comment-item>-->
-          <!--          </b-card-body>-->
+          <b-card-footer>
+            <b-button size="sm" pill variant="light" :pressed.sync="showComments">
+              <i class="far fa-comments fa-lg"/>
+              <b-badge v-if="currentBlog.comments" class="ml-2" pill variant="secondary">
+                {{ currentBlog.comments.length }}
+              </b-badge>
+            </b-button>
+          </b-card-footer>
+          <add-comment v-if="showComments" :blog-uuid="currentBlog.uuid" :current-user="currentUser"/>
+          <b-card-body v-if="showComments && currentBlog.comments && currentBlog.comments.length" class="pt-1 pb-1">
+            <comment-item v-for="(comment, index) in currentBlog.comments" :comment="comment" :index="index"
+                          :blog="currentBlog" :key="`blog-comment-${index}`" :current-user="currentUser">
+            </comment-item>
+          </b-card-body>
         </b-card>
       </div>
     </b-card-body>
@@ -91,11 +91,14 @@
 import {createNamespacedHelpers} from 'vuex'
 import ViewSpinner from "../../core/components/view-spinner/view-spinner";
 import BlogModal from "./modals/BlogModal";
+import AddComment from "./components/AddComment";
+import CommentItem from "./components/CommentItem";
 
 const {mapState, mapActions} = createNamespacedHelpers('blog')
+const {mapState: mapAuthState} = createNamespacedHelpers('auth')
 export default {
   name: "Blog",
-  components: {BlogModal, ViewSpinner},
+  components: {CommentItem, AddComment, BlogModal, ViewSpinner},
   data() {
     return {
       showComments: true,
@@ -107,6 +110,7 @@ export default {
       currentBlog: state => state.blogView.currentBlog,
       loading: state => state.blogView.loading,
     }),
+    ...mapAuthState(['currentUser']),
     isSmallScreen() {
       return this.windowWidth <= 480
     },
@@ -178,7 +182,7 @@ export default {
   top: 0;
 }
 
-/deep/.dropdown-item {
+/deep/ .dropdown-item {
   padding: 2px 10px;
 }
 

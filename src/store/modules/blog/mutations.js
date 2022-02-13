@@ -1,6 +1,7 @@
 import {
     ADD_NEW_BLOG,
     DELETE_BLOG,
+    DELETE_BLOG_COMMENTS,
     HIDE_BLOG_MODAL,
     REMOVE_CURRENT_BLOG,
     SET_BLOGS_DATA,
@@ -9,7 +10,8 @@ import {
     TOGGLE_BLOG_VIEW_LOADING,
     TOGGLE_LOADING,
     TOGGLE_MODAL_LOADING,
-    UPDATE_BLOG
+    UPDATE_BLOG,
+    UPDATE_BLOG_COMMENTS
 } from "./mutation-types";
 import moment from "moment";
 
@@ -69,5 +71,25 @@ export default {
     },
     [REMOVE_CURRENT_BLOG](state) {
         state.blogView.currentBlog = {}
+    },
+    [UPDATE_BLOG_COMMENTS](state, payload) {
+        const index = state.blogs.findIndex(b => b.uuid === payload.blogUuid)
+        state.blogs[index].comments.unshift(payload)
+        state.blogs = [...state.blogs]
+
+        if (state.blogView.currentBlog.uuid === payload.blogUuid &&
+            !state.blogView.currentBlog.comments.find(c => c.uuid === payload.uuid)) {
+            state.blogView.currentBlog.comments.unshift(payload)
+        }
+    },
+    [DELETE_BLOG_COMMENTS](state, payload) {
+        const index = state.blogs.findIndex(b => b.uuid === payload.blogUuid)
+        const filteredComments = state.blogs[index].comments.filter(c => c.uuid !== payload.uuid)
+        state.blogs[index].comments = [...filteredComments]
+        state.blogs = [...state.blogs]
+
+        if (state.blogView.currentBlog.uuid === payload.blogUuid) {
+            state.blogView.currentBlog.comments = [...filteredComments]
+        }
     },
 }

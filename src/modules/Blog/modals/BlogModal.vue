@@ -66,6 +66,7 @@ export default {
       form.createdBy = {...this.currentUser}
       form.createdAt = new Date().toLocaleString()
       form.updatedAt = form.createdAt
+      form.comments = []
 
       let res
       if (!form.uuid) {

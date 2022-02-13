@@ -1,6 +1,7 @@
 import {
     ADD_NEW_BLOG,
     DELETE_BLOG,
+    DELETE_BLOG_COMMENTS,
     HIDE_BLOG_MODAL,
     REMOVE_CURRENT_BLOG,
     SET_BLOGS_DATA,
@@ -9,7 +10,8 @@ import {
     TOGGLE_BLOG_VIEW_LOADING,
     TOGGLE_LOADING,
     TOGGLE_MODAL_LOADING,
-    UPDATE_BLOG
+    UPDATE_BLOG,
+    UPDATE_BLOG_COMMENTS
 } from "./mutation-types";
 
 export async function getAllBlog({commit}) {
@@ -58,6 +60,16 @@ export async function deleteBlog({state, commit}, blogUuid) {
 
 export async function removeCurrentBlog({commit}) {
     commit(REMOVE_CURRENT_BLOG)
+}
+
+export async function addComment({state, commit}, params) {
+    commit(UPDATE_BLOG_COMMENTS, params)
+    saveBlogData(state.blogs)
+}
+
+export async function deleteComment({state, commit}, params) {
+    commit(DELETE_BLOG_COMMENTS, params)
+    saveBlogData(state.blogs)
 }
 
 function saveBlogData(data = []) {
