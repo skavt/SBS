@@ -6,7 +6,26 @@
           <i class="fas fa-chevron-left"/>
           Back
         </b-button>
-        <div class="float-right">
+        <b-dropdown v-if="isSmallScreen" no-caret variant="link">
+          <template slot="button-content">
+            <i class="fas fa-ellipsis-v"/>
+          </template>
+          <b-dropdown-item>
+            <b-dropdown-item @click="onUpdateBlogClick" href="#">
+              <div class="d-flex justify-content-between align-items-center">
+                Edit
+                <i class="fas fa-pencil-alt text-info"/>
+              </div>
+            </b-dropdown-item>
+            <b-dropdown-item @click="onDeleteBlogClick" href="#">
+              <div class="d-flex justify-content-between align-items-center">
+                Delete
+                <i class="fas fa-trash-alt text-danger"/>
+              </div>
+            </b-dropdown-item>
+          </b-dropdown-item>
+        </b-dropdown>
+        <div v-else>
           <b-button class="mr-1" variant="outline-info" size="sm" @click="onUpdateBlogClick">
             <i class="fas fa-pencil-alt"/>
             Edit
@@ -29,7 +48,14 @@
                        height="48">
                 </b-img>
               </template>
-              <h5 class="mt-0">
+              <h5 v-if="isSmallScreen" class="mt-0" :style="smallScreenStyles">
+                <span class="user-name">
+                  {{ currentBlog.createdBy.lastName }}, {{ currentBlog.createdBy.firstName }}
+                </span>
+                <br/>
+                {{ currentBlog.updatedAt | relativeDate }}
+              </h5>
+              <h5 v-else class="mt-0" :style="smallScreenStyles">
                 <span class="user-name">
                   {{ currentBlog.createdBy.lastName }}, {{ currentBlog.createdBy.firstName }}
                 </span>
@@ -83,6 +109,9 @@ export default {
     }),
     isSmallScreen() {
       return this.windowWidth <= 480
+    },
+    smallScreenStyles() {
+      return this.isSmallScreen ? {fontSize: '12px'} : {}
     },
   },
   methods: {
@@ -147,6 +176,10 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
+}
+
+/deep/.dropdown-item {
+  padding: 2px 10px;
 }
 
 </style>
