@@ -40,62 +40,6 @@
         {{ computedHint }}
       </b-form-text>
     </b-form-group>
-
-    <b-form-group v-if="isCheckbox()">
-      <b-form-checkbox
-          ref="currentInput" v-model="model[attribute]" :key="`${attribute}-${uuid}`" :disabled="disabled"
-          :name="`${attribute}-${uuid}`" :switch="isSwitch" :size="size" :state="getState(v)" @change="onChange">
-        <span v-if="computedLabel">
-          {{ computedLabel }}
-          <span v-if="v.required" class="text-danger">*</span>
-        </span>
-      </b-form-checkbox>
-      <b-form-invalid-feedback :state="getState(v)">{{ getError(v.errors) }}
-      </b-form-invalid-feedback>
-      <b-form-text v-if="computedHint">
-        {{ computedHint }}
-      </b-form-text>
-    </b-form-group>
-
-    <b-form-group v-if="isFileUpload()">
-      <label v-if="computedLabel">
-        {{ computedLabel }}
-        <span v-if="v.required" class="text-danger">*</span>
-      </label>
-      <b-form-file v-model="model[attribute]" :type="type" :placeholder="computedPlaceholder" :state="getState(v)"
-                   :multiple="multiple" :file-name-formatter="formatNames">
-      </b-form-file>
-      <b-form-invalid-feedback :state="getState(v)">
-        {{ getError(v.errors) }}
-      </b-form-invalid-feedback>
-    </b-form-group>
-
-    <b-form-group v-if="isSelect()">
-      <label v-if="computedLabel">
-        {{ computedLabel }}
-        <span v-if="v.required" class="text-danger">*</span>
-      </label>
-      <b-input-group :prepend="prepend" :append="append" :size="size">
-        <template v-slot:append v-if="appendQuestion">
-          <b-tooltip :target="`question-mark-tooltip-${attribute}-${uuid}`" :title="appendQuestion"/>
-          <b-input-group-text :id="`question-mark-tooltip-${attribute}-${uuid}`" class="hover-cursor">
-            <i class="fas fa-question-circle"></i>
-          </b-input-group-text>
-        </template>
-
-        <b-form-select
-            v-if="isSelect()" v-model="model[attribute]" ref="currentInput" :id="inputId" :size="size"
-            :disabled="disabled" :options="options" :value-field="valueField" :text-field="textField"
-            :readonly="readonly" :autofocus="autofocus" :name="`${attribute}-${uuid}`" @keyup="onKeyup"
-            :key="`${attribute}-${uuid}`" @change="onChange" @input="onInput" @keydown="onKeydown" @blur="onBlur"
-            :state="getState(v)">
-        </b-form-select>
-
-        <b-form-invalid-feedback :state="getState(v)">
-          {{ getError(v.errors) }}
-        </b-form-invalid-feedback>
-      </b-input-group>
-    </b-form-group>
   </ValidationProvider>
 </template>
 
@@ -115,13 +59,6 @@ export default {
     type: {
       type: String,
       default: 'text'
-    },
-    multiple: {
-      type: Boolean,
-      default: false
-    },
-    formatNames: {
-      type: Function,
     },
     placeholder: {
       type: [String, Boolean],
@@ -177,22 +114,6 @@ export default {
     min: {
       type: [String, Number],
       default: 0
-    },
-    isSwitch: {
-      type: Boolean,
-      default: false
-    },
-    options: {
-      type: Array,
-      default: Array,
-    },
-    valueField: {
-      type: String,
-      default: 'value',
-    },
-    textField: {
-      type: String,
-      default: 'text',
     },
   },
   data() {
@@ -256,15 +177,6 @@ export default {
     },
     isTextarea() {
       return this.type === 'textarea';
-    },
-    isCheckbox() {
-      return this.type === 'checkbox';
-    },
-    isFileUpload() {
-      return this.type === 'file';
-    },
-    isSelect() {
-      return this.type === 'select';
     },
     onChange(val) {
       if (this.type === 'number' && val === '') {
